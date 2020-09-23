@@ -1,7 +1,14 @@
-FROM node:latest as node
-WORKDIR /app
-COPY . .
+### STAGE 1: Build ### FROM  node  AS  buil...
+
+### STAGE 1: Build ###
+FROM node AS build
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
 RUN npm install
-RUN npm build --prod
-FROM nginx:1.18.0-alpine
-COPY .  /usr/share/nginx/html
+COPY . .
+RUN npm run build
+### STAGE 2: Run ###
+FROM nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /dist/booksweb-client /usr/share/nginx/html
+EXPOSE 80
