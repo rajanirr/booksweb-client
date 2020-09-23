@@ -3,5 +3,5 @@ WORKDIR /app
 COPY . .
 RUN npm install
 RUN npm build --prod
-FROM nginx:apline
-COPY --from=node /app/dist/BookStore usr/share/nginx/html
+FROM nginx:1.17.1-alpine
+COPY --from=node /app/dist/booksweb-client usr/share/nginx/html
